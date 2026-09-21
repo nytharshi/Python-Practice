@@ -1,51 +1,70 @@
 import streamlit as st
+import subprocess
+import sys
+import os
+import re
 
 st.title("🐍 Python Practice")
-st.write("Try my Python programs!")
+st.write("Choose a Python program and run it!")
 
-program = st.selectbox(
-    "Choose a program",
-    [
-        "Even or Odd",
-        "Positive, Negative or Zero",
-        "Voting Eligibility",
-        "Absolute Value",
-        "Greater of Two Numbers",
-    ],
-)
+# Find all Python files in this folder
+files = [
+    f for f in os.listdir(".")
+    if f.endswith(".py") and f != "streamlit_app.py"
+]
 
-if program == "Even or Odd":
-    x = st.number_input("Enter a number", step=1)
-    if st.button("Run"):
-        st.write(f"{x:g} is {'even' if x % 2 == 0 else 'odd'}")
+files.sort()
 
-elif program == "Positive, Negative or Zero":
-    x = st.number_input("Enter a number", step=1)
-    if st.button("Run"):
-        if x > 0:
-            st.write("It is positive")
-        elif x < 0:
-            st.write("It is negative")
-        else:
-            st.write("It is zero")
+if not files:
+    st.warning("No Python practice files found.")
+    st.stop()
 
-elif program == "Voting Eligibility":
-    age = st.number_input("Enter your age", min_value=0, step=1)
-    if st.button("Run"):
-        st.write("You are eligible to vote" if age >= 18 else "You are not eligible to vote")
+selected_file = st.selectbox("Choose a program", files)
 
-elif program == "Absolute Value":
-    x = st.number_input("Enter a number")
-    if st.button("Run"):
-        st.write(f"Absolute value is {abs(x):g}")
+st.write("### Run:", selected_file)
 
-elif program == "Greater of Two Numbers":
-    x = st.number_input("Enter first number")
-    y = st.number_input("Enter second number")
-    if st.button("Run"):
-        if x > y:
-            st.write(f"{x:g} is greater than {y:g}")
-        elif y > x:
-            st.write(f"{y:g} is greater than {x:g}")
-        else:
-            st.write("Both numbers are equal")
+# Read the selected Python file
+with open(selected_file, "r", encoding="utf-8") as f:
+    code = f.read()
+
+# Find input() prompts in the Python program
+inputs = re.findall(r'input\(\s*["\'](.*?)["\']\s*\)', code)
+
+user_inputs = []
+
+for i, prompt in enumerate(inputs):
+    user_inputs.append(
+        st.text_input(prompt, key=f"input_{i}")
+    )
+
+if st.button("▶ Run Program"):
+    # Replace input() calls with the values entered on the website
+    modified_code = code
+
+    for value in user_inputs:
+        modified_code = re.sub(
+            r'input\(\s*["\'].*?["\']\s*\)',
+            repr(value),
+            modified_code,
+            count=1
+        )
+
+    # Run the program
+    try:
+        result = subprocess.run(
+            [sys.executable, "-c", modified_code],
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+
+        if result.stdout:
+            st.success("Output")
+            st.code(result.stdout)
+
+        if result.stderr:
+            st.error("Error")
+            st.code(result.stderr)
+
+    except subprocess.TimeoutExpired:
+        st.error("Program took too long to finish.")
