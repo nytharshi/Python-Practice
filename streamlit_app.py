@@ -5,51 +5,50 @@ import os
 import re
 
 st.title("🐍 Python Practice")
-st.write("Choose a Python program and run it!")
+st.write("Choose any Python file from the repository and run it.")
 
-# Find all Python files in this folder
-files = [
+# Find all Python files except the Streamlit app itself
+files = sorted(
     f for f in os.listdir(".")
     if f.endswith(".py") and f != "streamlit_app.py"
-]
-
-files.sort()
+)
 
 if not files:
     st.warning("No Python practice files found.")
     st.stop()
 
+# Choose a program
 selected_file = st.selectbox("Choose a program", files)
 
-st.write("### Run:", selected_file)
-
-# Read the selected Python file
+# Read the selected program
 with open(selected_file, "r", encoding="utf-8") as f:
     code = f.read()
 
-# Find input() prompts in the Python program
-inputs = re.findall(r'input\(\s*["\'](.*?)["\']\s*\)', code)
+# Find input() statements
+input_pattern = r'input\(\s*(["\'])(.*?)\1\s*\)'
+inputs = re.findall(input_pattern, code)
 
 user_inputs = []
 
-for i, prompt in enumerate(inputs):
-    user_inputs.append(
-        st.text_input(prompt, key=f"input_{i}")
-    )
+# Create input boxes
+for i, (_, prompt) in enumerate(inputs):
+    value = st.text_input(prompt, key=f"input_{i}")
+    user_inputs.append(value)
 
+# Run button
 if st.button("▶ Run Program"):
+
     # Replace input() calls with the values entered on the website
     modified_code = code
 
     for value in user_inputs:
         modified_code = re.sub(
-            r'input\(\s*["\'].*?["\']\s*\)',
-            repr(value),
+            input_pattern,
+            lambda match, v=value: repr(v),
             modified_code,
             count=1
         )
 
-    # Run the program
     try:
         result = subprocess.run(
             [sys.executable, "-c", modified_code],
@@ -66,5 +65,11 @@ if st.button("▶ Run Program"):
             st.error("Error")
             st.code(result.stderr)
 
+        if not result.stdout and not result.stderr:
+            st.info("Program finished with no output.")
+
     except subprocess.TimeoutExpired:
         st.error("Program took too long to finish.")
+
+    except Exception as e:
+        st.error(f"Something went wrong: {e}")
