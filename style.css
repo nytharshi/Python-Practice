@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #0e1117;
+    color: white;
+    margin: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 36px;
+}
+
+p {
+    color: #b8b8b8;
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 20px 0;
+    background: #262730;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 6px;
+}
+
+pre {
+    background: #161b22;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+}
