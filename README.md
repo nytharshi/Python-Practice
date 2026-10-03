@@ -1,6 +1,7 @@
 # Python-Practice
-Check out all the python codes here 
-https://python-practice.streamlit.app/
-All the codes on the website are made by myself 
-I took help Of AI in making the website and in setting up the file through which i just click the file to create the code as a repo and save it for Users to run and use. 
-The website has its own code runner, so u can give input and it would run and give you the output
+A website to save my code and run it whenever I want to
+<img width="800" height="396" alt="ezgif-1cbb736e08ff5808" src="https://github.com/user-attachments/assets/115450cd-6fc5-401d-afe6-df62f53cdac8" />
+ Try it here https://python-practice.streamlit.app/
+ Its main function is to save the code made by me in VS Code and make it accessible to everyone via a website.
+ And It is really easy to make 
+ I used the help of AI in making the website, like the procedure, although the code is 50/50 AI and me. The Clickit.bat file is a file I use to save the new files I made in VS Code. It turns them into repositories, the main work the file does is of running commands.
