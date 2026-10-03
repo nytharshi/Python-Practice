@@ -24,7 +24,12 @@ header {
 
     align-items: center;
 }
-
+.github-button svg {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
 
 h1 {
 
