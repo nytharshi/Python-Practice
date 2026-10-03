@@ -1,47 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Python Practice</title>
+
     <link rel="stylesheet" href="style.css">
 
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.29.5/full/pyodide.js"></script>
 </head>
 
 <body>
 
     <header>
-        <h1>🐍 Python Practice</h1>
+
+        <div>
+            <h1>🐍 Python Practice</h1>
+
+            <p>
+                Choose any Python file from my repository
+                and run it.
+            </p>
+        </div>
 
         <a
-            class="github-button"
+            class="github"
             href="https://github.com/nytharshi/Python-Practice"
             target="_blank"
         >
             🐙 GitHub
         </a>
+
     </header>
 
+
     <main>
-        <p>Choose a Python program, view the code, and run it.</p>
 
         <select id="fileSelect">
-            <option value="">Choose a program</option>
+
+            <option value="">
+                Choose a Python program
+            </option>
+
         </select>
 
-        <pre id="code">Select a Python program to view its code.</pre>
 
-        <div class="buttons">
-            <button id="runButton">▶ Run Code</button>
-        </div>
+        <h2>Code</h2>
+
+        <pre id="code">
+Select a Python program.
+        </pre>
+
+
+        <h2>Input</h2>
+
+        <textarea
+            id="input"
+            placeholder="Enter input here..."
+        ></textarea>
+
+
+        <button id="run">
+            ▶ Run Code
+        </button>
+
 
         <h2>Output</h2>
 
-        <pre id="output">Python is loading...</pre>
+        <pre id="output">
+Output will appear here.
+        </pre>
+
     </main>
+
 
     <script src="script.js"></script>
 
 </body>
+
 </html>

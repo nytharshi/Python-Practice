@@ -1,83 +1,148 @@
 body {
-    font-family: Arial, sans-serif;
-    background: #0e1117;
-    color: white;
+
     margin: 0;
+
+    background: #0e1117;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
 }
 
+
 header {
+
     max-width: 900px;
-    margin: 40px auto 0;
+
+    margin: 40px auto 20px;
+
     padding: 0 20px;
 
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
 }
 
+
 h1 {
+
     font-size: 36px;
+
+    margin-bottom: 10px;
 }
 
-.github-button {
-    text-decoration: none;
-    color: white;
-    background: #24292f;
-    padding: 10px 16px;
-    border-radius: 7px;
-}
-
-main {
-    max-width: 900px;
-    margin: 10px auto;
-    padding: 20px;
-}
 
 p {
+
     color: #b8b8b8;
 }
 
-select {
-    width: 100%;
-    padding: 12px;
-    margin: 20px 0;
+
+.github {
+
     background: #262730;
+
     color: white;
-    border: 1px solid #555;
-    border-radius: 6px;
+
+    text-decoration: none;
+
+    padding: 12px 18px;
+
+    border-radius: 7px;
 }
+
+
+main {
+
+    max-width: 900px;
+
+    margin: auto;
+
+    padding: 20px;
+}
+
+
+select {
+
+    width: 100%;
+
+    padding: 14px;
+
+    background: #262730;
+
+    color: white;
+
+    border: 1px solid #555;
+
+    border-radius: 7px;
+
+    font-size: 15px;
+}
+
 
 pre {
+
     background: #161b22;
+
     padding: 20px;
+
     border-radius: 8px;
-    overflow-x: auto;
+
     white-space: pre-wrap;
+
+    overflow-x: auto;
+
+    min-height: 100px;
 }
 
-.buttons {
-    margin-top: 15px;
+
+textarea {
+
+    width: 100%;
+
+    min-height: 100px;
+
+    box-sizing: border-box;
+
+    background: #161b22;
+
+    color: white;
+
+    border: 1px solid #444;
+
+    border-radius: 8px;
+
+    padding: 15px;
+
+    font-family: monospace;
+
+    resize: vertical;
 }
+
 
 button {
+
+    margin-top: 15px;
+
+    padding: 12px 22px;
+
     background: #2ea043;
+
     color: white;
+
     border: none;
-    padding: 12px 20px;
+
     border-radius: 7px;
-    cursor: pointer;
+
     font-size: 16px;
+
+    cursor: pointer;
 }
 
-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
 
-h2 {
-    margin-top: 30px;
-}
+button:hover {
 
-#output {
-    min-height: 100px;
+    background: #238636;
 }
