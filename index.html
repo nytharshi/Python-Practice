@@ -5,20 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Python Practice</title>
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.29.5/full/pyodide.js"></script>
 </head>
+
 <body>
 
-    <div class="container">
+    <header>
         <h1>🐍 Python Practice</h1>
-        <p>Choose any Python file from my repository and view its code.</p>
+
+        <a
+            class="github-button"
+            href="https://github.com/nytharshi/Python-Practice"
+            target="_blank"
+        >
+            🐙 GitHub
+        </a>
+    </header>
+
+    <main>
+        <p>Choose a Python program, view the code, and run it.</p>
 
         <select id="fileSelect">
             <option value="">Choose a program</option>
         </select>
 
         <pre id="code">Select a Python program to view its code.</pre>
-    </div>
+
+        <div class="buttons">
+            <button id="runButton">▶ Run Code</button>
+        </div>
+
+        <h2>Output</h2>
+
+        <pre id="output">Python is loading...</pre>
+    </main>
 
     <script src="script.js"></script>
+
 </body>
 </html>

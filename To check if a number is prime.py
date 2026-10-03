@@ -9,6 +9,7 @@ else:
         y+=1 
         break
     if y>0:
+
      print("The number is a not a prime")
     else:
      print("The number is a prime number")
