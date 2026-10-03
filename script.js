@@ -184,18 +184,12 @@ select.addEventListener("change", async () => {
 runButton.addEventListener("click", async () => {
 
     if (!currentCode) {
-
-        outputBox.textContent =
-            "Please select a Python program.";
-
+        outputBox.textContent = "Please select a Python program.";
         return;
     }
 
     if (!pyodide) {
-
-        outputBox.textContent =
-            "Python is still loading. Please wait.";
-
+        outputBox.textContent = "Python is still loading. Please wait.";
         return;
     }
 
@@ -206,29 +200,31 @@ runButton.addEventListener("click", async () => {
     const values = inputs.map(input => input.value);
 
     let inputIndex = 0;
-
     let output = "";
 
     runButton.disabled = true;
     runButton.textContent = "Running...";
-
     outputBox.textContent = "Running...";
 
     try {
 
-        // Provide input() values to Python
-        pyodide.setStdin({
-            stdin: () => {
-
+        // Create our own input() function
+        pyodide.globals.set(
+            "get_user_input",
+            () => {
                 if (inputIndex < values.length) {
-
                     return values[inputIndex++];
-
                 }
 
-                return null;
+                return "";
             }
-        });
+        );
+
+        // Replace input(...) with get_user_input(...)
+        const modifiedCode = currentCode.replace(
+            /\binput\s*\(/g,
+            "get_user_input("
+        );
 
         // Capture print() output
         pyodide.setStdout({
@@ -237,16 +233,17 @@ runButton.addEventListener("click", async () => {
             }
         });
 
+        // Capture errors
         pyodide.setStderr({
             batched: message => {
                 output += message + "\n";
             }
         });
 
-        await pyodide.runPythonAsync(currentCode);
+        await pyodide.runPythonAsync(modifiedCode);
 
         outputBox.textContent =
-            output || "Program finished.";
+            output.trim() || "Program finished.";
 
     } catch (error) {
 
