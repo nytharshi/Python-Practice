@@ -1,106 +1,83 @@
-let pyodide = null;
-
-const files = [
-    "To calculate average investment cost per share.py",
-    "To calculate 10% hike every year.py",
-    "To check if a number is prime.py",
-    "To get gross profit, net profit and net profit percentage.py",
-    "To swap two numbers using third variable.py",
-    "Write a program to check whether a number is divisible by 5 and 11.py",
-    "Write a program to check whether a number is even or odd.py",
-    "Write a program to check whether a number is positive, negative, or zero.py",
-    "Write a program to check whether a person is eligible to vote or not.py",
-    "Write a program to find the absolute value of a number.py",
-    "Write a program to find the greater of two numbers entered by the user.py"
-];
-
-const select = document.getElementById("fileSelect");
-const codeBox = document.getElementById("code");
-const outputBox = document.getElementById("output");
-const runButton = document.getElementById("runButton");
-
-files.forEach(file => {
-    const option = document.createElement("option");
-    option.value = file;
-    option.textContent = file;
-    select.appendChild(option);
-});
-
-select.addEventListener("change", async () => {
-
-    if (!select.value) {
-        codeBox.textContent = "Select a Python program to view its code.";
-        return;
-    }
-
-    const url =
-        "https://raw.githubusercontent.com/nytharshi/Python-Practice/main/" +
-        encodeURIComponent(select.value);
-
-    const response = await fetch(url);
-    const text = await response.text();
-
-    codeBox.textContent = text;
-    outputBox.textContent = "Click 'Run Code' to execute this program.";
-});
-
-async function loadPython() {
-
-    outputBox.textContent = "Loading Python...";
-
-    pyodide = await loadPyodide();
-
-    outputBox.textContent = "Python is ready! Select a program and click Run Code.";
+body {
+    font-family: Arial, sans-serif;
+    background: #0e1117;
+    color: white;
+    margin: 0;
 }
 
-runButton.addEventListener("click", async () => {
+header {
+    max-width: 900px;
+    margin: 40px auto 0;
+    padding: 0 20px;
 
-    if (!select.value) {
-        outputBox.textContent = "Please select a Python program first.";
-        return;
-    }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-    if (!pyodide) {
-        outputBox.textContent = "Python is still loading. Please wait.";
-        return;
-    }
+h1 {
+    font-size: 36px;
+}
 
-    runButton.disabled = true;
-    outputBox.textContent = "Running...";
+.github-button {
+    text-decoration: none;
+    color: white;
+    background: #24292f;
+    padding: 10px 16px;
+    border-radius: 7px;
+}
 
-    try {
+main {
+    max-width: 900px;
+    margin: 10px auto;
+    padding: 20px;
+}
 
-        const code = codeBox.textContent;
+p {
+    color: #b8b8b8;
+}
 
-        let output = "";
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 20px 0;
+    background: #262730;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 6px;
+}
 
-        pyodide.setStdout({
-            batched: (text) => {
-                output += text;
-            }
-        });
+pre {
+    background: #161b22;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+}
 
-        pyodide.setStderr({
-            batched: (text) => {
-                output += text;
-            }
-        });
+.buttons {
+    margin-top: 15px;
+}
 
-        await pyodide.runPythonAsync(code);
+button {
+    background: #2ea043;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 16px;
+}
 
-        if (output === "") {
-            output = "Program finished successfully.";
-        }
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
-        outputBox.textContent = output;
+h2 {
+    margin-top: 30px;
+}
 
-    } catch (error) {
-
-        outputBox.textContent = error;
-
-    }
-
-    runButton.disabled = false;
-});
-
-loadPython();
+#output {
+    min-height: 100px;
+}
