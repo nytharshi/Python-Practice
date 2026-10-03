@@ -1,148 +1,104 @@
-body {
+const owner = "nytharshi";
+const repo = "Python-Practice";
+const branch = "main";
 
-    margin: 0;
+const select = document.getElementById("fileSelect");
+const codeBox = document.getElementById("code");
+const inputBox = document.getElementById("input");
+const outputBox = document.getElementById("output");
+const runButton = document.getElementById("run");
 
-    background: #0e1117;
+let currentCode = "";
 
-    color: white;
+async function loadFiles() {
+    try {
+        const response = await fetch(
+            `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`
+        );
 
-    font-family: Arial, sans-serif;
+        const data = await response.json();
+
+        const pythonFiles = data.tree.filter(
+            file =>
+                file.type === "blob" &&
+                file.path.endsWith(".py")
+        );
+
+        pythonFiles.forEach(file => {
+            const option = document.createElement("option");
+
+            option.value = file.path;
+            option.textContent = file.path;
+
+            select.appendChild(option);
+        });
+
+    } catch (error) {
+        outputBox.textContent = "Could not load Python files.";
+        console.error(error);
+    }
 }
 
+select.addEventListener("change", async () => {
+    const file = select.value;
 
-header {
+    if (!file) {
+        codeBox.textContent = "Select a Python program.";
+        return;
+    }
 
-    max-width: 900px;
+    const url =
+        `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${encodeURIComponent(file)}`;
 
-    margin: 40px auto 20px;
+    const response = await fetch(url);
 
-    padding: 0 20px;
+    currentCode = await response.text();
 
-    display: flex;
+    codeBox.textContent = currentCode;
 
-    justify-content: space-between;
+    outputBox.textContent =
+        "Click Run Code to execute the program.";
+});
 
-    align-items: center;
-}
+runButton.addEventListener("click", async () => {
 
+    if (!currentCode) {
+        outputBox.textContent =
+            "Please select a Python program.";
+        return;
+    }
 
-h1 {
+    outputBox.textContent = "Running...";
+    runButton.disabled = true;
 
-    font-size: 36px;
+    try {
 
-    margin-bottom: 10px;
-}
+        const response = await fetch("/api/run", {
+            method: "POST",
 
+            headers: {
+                "Content-Type": "application/json"
+            },
 
-p {
+            body: JSON.stringify({
+                code: currentCode,
+                input: inputBox.value
+            })
+        });
 
-    color: #b8b8b8;
-}
+        const data = await response.json();
 
+        outputBox.textContent =
+            data.output || "Program finished.";
 
-.github {
+    } catch (error) {
 
-    background: #262730;
+        outputBox.textContent =
+            "Error: " + error;
 
-    color: white;
+    }
 
-    text-decoration: none;
+    runButton.disabled = false;
+});
 
-    padding: 12px 18px;
-
-    border-radius: 7px;
-}
-
-
-main {
-
-    max-width: 900px;
-
-    margin: auto;
-
-    padding: 20px;
-}
-
-
-select {
-
-    width: 100%;
-
-    padding: 14px;
-
-    background: #262730;
-
-    color: white;
-
-    border: 1px solid #555;
-
-    border-radius: 7px;
-
-    font-size: 15px;
-}
-
-
-pre {
-
-    background: #161b22;
-
-    padding: 20px;
-
-    border-radius: 8px;
-
-    white-space: pre-wrap;
-
-    overflow-x: auto;
-
-    min-height: 100px;
-}
-
-
-textarea {
-
-    width: 100%;
-
-    min-height: 100px;
-
-    box-sizing: border-box;
-
-    background: #161b22;
-
-    color: white;
-
-    border: 1px solid #444;
-
-    border-radius: 8px;
-
-    padding: 15px;
-
-    font-family: monospace;
-
-    resize: vertical;
-}
-
-
-button {
-
-    margin-top: 15px;
-
-    padding: 12px 22px;
-
-    background: #2ea043;
-
-    color: white;
-
-    border: none;
-
-    border-radius: 7px;
-
-    font-size: 16px;
-
-    cursor: pointer;
-}
-
-
-button:hover {
-
-    background: #238636;
-}
+loadFiles();
